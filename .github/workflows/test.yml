@@ -2,10 +2,13 @@ name: CI
 
 on:
   workflow_dispatch:
+  push:
 
 jobs:
   translations:
     runs-on: ubuntu-latest
+    env:
+      DEFAULT_IF: ""
     steps:
     - uses: actions/checkout@v1
       with:
@@ -18,3 +21,6 @@ jobs:
 #       run: sudo apt-get update && sudo apt-get install virtualbox
       
     - run: echo ${{ steps.if_detect.outputs.default_if }}
+    - run: export DEFAULT_IF=${{ steps.if_detect.outputs.default_if }}
+    
+    - run: echo $DEFAULT_IF
