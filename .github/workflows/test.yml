@@ -10,5 +10,10 @@ jobs:
     - uses: actions/checkout@v1
       with:
         fetch-depth: 1
+    
+    - run: export DEFAULT_IF=$(ip r  | grep default | awk -F' ' '{print $5}')
+    
     - name: Install virtualbox
       run: sudo apt-get update && sudo apt-get install virtualbox
+      
+    - name: echo $DEFAULT_IF
