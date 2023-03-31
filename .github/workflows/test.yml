@@ -11,9 +11,10 @@ jobs:
       with:
         fetch-depth: 1
     
-    - run: export DEFAULT_IF=$(ip r  | grep default | awk -F' ' '{print $5}')
+    - run: ip r  | grep default | awk -F' ' '{print $5}'
+      id: default_if
     
-    - name: Install virtualbox
-      run: sudo apt-get update && sudo apt-get install virtualbox
+#     - name: Install virtualbox
+#       run: sudo apt-get update && sudo apt-get install virtualbox
       
-    - run: echo $DEFAULT_IF
+    - run: echo ${{ steps.default_if.outputs.stdout }}
