@@ -16,4 +16,4 @@ jobs:
     - name: Install virtualbox
       run: sudo apt-get update && sudo apt-get install virtualbox
       
-    - name: echo $DEFAULT_IF
+    - run: echo $DEFAULT_IF
