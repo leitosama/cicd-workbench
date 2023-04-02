@@ -10,4 +10,10 @@ jobs:
   translations:
     runs-on: macos-12
     steps:
-      - run: /Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms
+      - name: Setup `packer`
+        uses: hashicorp/setup-packer@main
+      
+      - run: env
+      
+      - run: find / -name "*packer.d" 2>/dev/null
+      
