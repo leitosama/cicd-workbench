@@ -15,5 +15,5 @@ jobs:
       
       - run: env
       
-      - run: find / -name "*packer.d" 2>/dev/null
+      - run: ls -alh /Users/$USER/*
       
