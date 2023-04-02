@@ -3,24 +3,11 @@ name: CI
 on:
   workflow_dispatch:
   push:
+    paths:
+      - '.github/workflows/test.yml
 
 jobs:
   translations:
-    runs-on: ubuntu-latest
-    env:
-      DEFAULT_IF: ""
+    runs-on: macos-12
     steps:
-    - uses: actions/checkout@v1
-      with:
-        fetch-depth: 1
-    
-    - run: echo "DEFAULT_IF=$(ip r  | grep default | awk -F' ' '{print $5}')" >> $GITHUB_OUTPUT
-      id: if_detect
-      
-#     - name: Install virtualbox
-#       run: sudo apt-get update && sudo apt-get install virtualbox
-      
-    - run: echo ${{ steps.if_detect.outputs.default_if }}
-    - run: export DEFAULT_IF=${{ steps.if_detect.outputs.default_if }}
-    
-    - run: echo $DEFAULT_IF
+      - run: /Applications/VirtualBox.app/Contents/MacOS/VBoxManage list vms
