@@ -27,4 +27,4 @@ jobs:
           password: ${{ secrets.GITHUB_TOKEN }}
 
       - name: check docker
-        run: ls -alh ~
+        run: ls -alh ~/.docker
