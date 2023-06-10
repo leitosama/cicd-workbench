@@ -8,12 +8,10 @@ on:
 
 jobs:
   translations:
-    runs-on: macos-12
+    runs-on: ubuntu
     steps:
-      - name: Setup `packer`
-        uses: hashicorp/setup-packer@main
-      
-      - run: env
-      
-      - run: ls -alh /Users/$USER/*
-      
+      - run: |
+        cat <<EOF >>test.txt
+        test
+        test
+        EOF
