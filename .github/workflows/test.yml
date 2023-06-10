@@ -8,7 +8,7 @@ on:
 
 jobs:
   translations:
-    runs-on: ubuntu
+    runs-on: ubuntu-latest
     steps:
       - run: |
           cat <<EOF >>test.txt
