@@ -11,7 +11,7 @@ jobs:
     runs-on: ubuntu
     steps:
       - run: |
-        cat <<EOF >>test.txt
-        test
-        test
-        EOF
+          cat <<EOF >>test.txt
+          test
+          test
+          EOF
