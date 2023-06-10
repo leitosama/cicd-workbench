@@ -15,3 +15,5 @@ jobs:
           test
           test
           EOF
+
+      - run: cat test.txt
