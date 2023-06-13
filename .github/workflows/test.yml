@@ -9,6 +9,8 @@ on:
 jobs:
   translations:
     runs-on: ubuntu-latest
+    permissions:
+      actions: write
     steps:
       - name: Get cache
         uses: actions/cache/restore@v3
