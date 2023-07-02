@@ -1,0 +1,56 @@
+name: Mirror to YC Object Storage
+
+on:
+  workflow_dispatch:
+    inputs:
+      url:
+        description: 'URL to mirror'
+        required: true
+        type: string
+      sha256sum: 
+        description: 'SHA256 Sum for file'
+        required: false
+        type: string
+      filename:
+        description: 'Filename in YC storage'
+        required: false
+      bucket:
+        description: 'Bucket to upload'
+        required: true
+        default: 'dlab-windows-iso'
+      
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Pre-download
+        run: mkdir ./download
+
+      - name: Download file
+        id: download
+        run: |
+          wget --content-disposition ${{ inputs.url }}
+          file=$(ls)
+          if [[ -n "${{ inputs.filename }}" ]]; then mv $file ${{ inputs.filename }}; file=${{ inputs.filename }}; fi
+          echo "file=$file" >> $GITHUB_OUTPUT 
+        working-directory: ./download
+
+      - name: Check SHA256 sum
+        if: "${{ inputs.sha256sum != '' }}"
+        run: echo "${{ inputs.sha256sum }} ${{ steps.download.outputs.file }}" | shas256sum --check
+        working-directory: ./download
+
+      - name: Put to Yandex Object storage
+        run: |
+          alias ycs3='aws s3 --endpoint-url=https://storage.yandexcloud.net'
+          ycs3 cp --quiet ${{ steps.download.outputs.file }} s3://${{ inputs.bucket }}
+          sha256sum ${{ steps.download.outputs.file }} | ycs3 cp --quiet - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.sha256sum
+          echo ${{ inputs.url }} | ycs3 cp --quiet - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.url
+        working-directory: ./download
+        env:
+          AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
+          AWS_SECRET_ACCESS_KEY: ${{ secrets.YC_SECRET_ACCESS_KEY }}
+          AWS_DEFAULT_REGION: "ru-central1"
+      
+      - name: Post-download
+        run: rm -rf ./download
