@@ -41,7 +41,7 @@ jobs:
         working-directory: ./download
 
       - name: Put to Yandex Object storage
-        run: 
+        run: |
           aws s3 --endpoint-url=https://storage.yandexcloud.net cp ${{ steps.download.outputs.file }} s3://${{ inputs.bucket }}
           sha256sum ${{ steps.download.outputs.file }} | aws s3 --endpoint-url=https://storage.yandexcloud.net cp - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.sha256sum
           echo ${{ inputs.url }} | aws s3 --endpoint-url=https://storage.yandexcloud.net cp - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.url
