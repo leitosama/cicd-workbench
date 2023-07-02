@@ -29,7 +29,7 @@ jobs:
       - name: Download file
         id: download
         run: |
-          wget --content-disposition ${{ inputs.url }}
+          wget -nv --content-disposition ${{ inputs.url }}
           file=$(ls)
           if [[ -n "${{ inputs.filename }}" ]]; then mv $file ${{ inputs.filename }}; file=${{ inputs.filename }}; fi
           echo "file=$file" >> $GITHUB_OUTPUT 
@@ -37,7 +37,7 @@ jobs:
 
       - name: Check SHA256 sum
         if: "${{ inputs.sha256sum != '' }}"
-        run: echo "${{ inputs.sha256sum }} ${{ steps.download.outputs.file }}" | shas256sum --check
+        run: echo "${{ inputs.sha256sum }} ${{ steps.download.outputs.file }}" | sha256sum --check
         working-directory: ./download
 
       - name: Put to Yandex Object storage
