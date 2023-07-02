@@ -41,12 +41,10 @@ jobs:
         working-directory: ./download
 
       - name: Put to Yandex Object storage
-        run: |
-          shopt -s expand_aliases
-          alias ycs3='aws s3 --endpoint-url=https://storage.yandexcloud.net'
-          ycs3 cp --quiet ${{ steps.download.outputs.file }} s3://${{ inputs.bucket }}
-          sha256sum ${{ steps.download.outputs.file }} | ycs3 cp --quiet - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.sha256sum
-          echo ${{ inputs.url }} | ycs3 cp --quiet - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.url
+        run: 
+          aws s3 --endpoint-url=https://storage.yandexcloud.net ${{ steps.download.outputs.file }} s3://${{ inputs.bucket }}
+          sha256sum ${{ steps.download.outputs.file }} | aws s3 --endpoint-url=https://storage.yandexcloud.net - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.sha256sum
+          echo ${{ inputs.url }} | aws s3 --endpoint-url=https://storage.yandexcloud.net - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.url
         working-directory: ./download
         env:
           AWS_ACCESS_KEY_ID: ${{ secrets.YC_ACCESS_KEY_ID }}
