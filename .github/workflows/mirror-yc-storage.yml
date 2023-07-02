@@ -42,6 +42,7 @@ jobs:
 
       - name: Put to Yandex Object storage
         run: |
+          shopt -s expand_aliases
           alias ycs3='aws s3 --endpoint-url=https://storage.yandexcloud.net'
           ycs3 cp --quiet ${{ steps.download.outputs.file }} s3://${{ inputs.bucket }}
           sha256sum ${{ steps.download.outputs.file }} | ycs3 cp --quiet - s3://${{ inputs.bucket }}/${{ steps.download.outputs.file }}.sha256sum
